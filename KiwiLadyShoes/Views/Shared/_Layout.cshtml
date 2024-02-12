@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KiwiLadyShoes</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/KiwiLadyShoes.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+
+        <!--I changed in the next line navbar-light to navbar-dark (changes KiwiLadyShoes
+        and hamburger menu to white font); changed bg-white to dark blue (my Style - .Bgrnd),
+        added bg-gradient for gradient, changed -sm to -md, Ira, 29.09.23-->
+        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-dark Bgrnd bg-gradient border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/logoH.webp" alt="logo" height="70">
+                </a>
+                <button style="color: #dcb98e " class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <!--changed text-dark to text-light, Ira, 29.09.23-->
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <!--changed text-dark to text-light, Ira, 29.09.23-->
+                            <a class="nav-link text-light" asp-area="" asp-controller="Shoe" asp-action="Public">Shoes</a>
+                        </li>
+                         <li class="nav-item dropdown text-light">
+                            <!--created the dropdown menu on 11/11/23 from docs from bootstrap 5 website, Ira , the items of the menu I created earlier and just moved them here-->
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Options
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <li class="dropdown-item">  <!--created by Ira, 29.09.23, moved to dropdown menu on 11/11-->
+                                    <a class="nav-link  text-light" asp-area="" asp-controller="ContactUs" asp-action="Index">Contact Us</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <!--created by Ira, 11/11/23-->
+                                    <a class="nav-link  text-light" asp-area="" asp-controller="Wish" asp-action="Index">Wish list</a>
+                                </li>
+                                    <!--the Cart item added by Ira, 10/11/23,moved to dropdown menu on 11/11-->
+                                    <li class="dropdown-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="ShoppingCart" asp-action="Index">Cart</a>
+                                    </li>
+          
+                            </ul>
+                        </li>
+
+
+                    </ul>
+
+
+                    <!-------Ira, 16/10/23 ------------------------>
+                    <!-------Added Role based only configurations Victor , 05/11/23 ------------------------>
+                    @if (User.IsInRole("Manager") || User.IsInRole("Administrator") || User.IsInRole("Salesperson"))
+                    {
+                        <ul class="navbar-nav flex-grow-end">
+                            <li class="nav-item">
+                                <!--changed text-dark to text-light, Ira, 29.09.23-->
+                                <a class="nav-link text-light" asp-area="" asp-controller="Management" asp-action="Index">Management</a>
+                            </li>
+                          
+
+                        </ul>
+                    }
+                    <!------------------------------>
+                    <partial name="_LoginPartial" />
+
+
+                    <!--Search bar, Ira, 29.09.23-->
+                    @*<form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light btn-sm" type="submit">Search</button>
+                    </form>*@
+                    <!--End of Search bar, Ira, 29.09.23-->
+                </div>
+            </div>
+
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+
+            &copy; 2023 - Kiwi Lady Shoes - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

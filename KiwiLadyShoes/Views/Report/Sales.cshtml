@@ -1,0 +1,98 @@
+﻿@model IEnumerable<KiwiLadyShoes.Models.ViewModels.ReportSales>
+@*Added View Module -- Victor Reis - 05/11/2023*@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-10">
+
+        <h1>Sales Per Shoe</h1>
+    </div>
+
+    <div class="col-md-2">
+        <br />
+
+        <a asp-action="Index">Back to All Reports</a>
+    </div>
+
+    <form id="searchForm" action="/Report/Sales" method="get" autocomplete="off">
+
+        Search Shoe
+
+        <div>
+            <input type="text" id="searchString" name="searchString"
+                   autocomplete="off" onkeyup="XAjaxRequest(this.value);"
+                   style="width: 180px" />
+            <input type="submit" value="Search" />
+
+            <br />
+        </div>
+    </form>
+
+    
+</div>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShoeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StockQuantity)
+
+            </th>
+            <th>
+                Availability
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Image)*@
+                    <img src="@Url.Content(item.Image)" alt="Shoe Image" width="120em">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShoeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+
+                   
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StockQuantity)
+                </td>
+                <td>
+                @if (item.StockQuantity < 10 & item.StockQuantity > 0)
+                {
+                    <span class="text-warning">  LOW STOCK</span>
+                }
+                else if ((item.StockQuantity == 0))
+                {
+                    <span class="text-danger"> OUT OF STOCK</span>
+                }
+                else
+                {
+                    <span class="text-success"> AVAILABLE</span>
+
+                }
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

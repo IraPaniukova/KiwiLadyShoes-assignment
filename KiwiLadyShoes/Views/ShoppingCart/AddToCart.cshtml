@@ -1,0 +1,19 @@
+﻿@model Shoe
+
+<h2>Add to Cart</h2>
+
+<div>
+    <h4>@Model.ShoeName</h4>
+    <p>Price: @Model.Price.ToString("c")</p>
+</div>
+
+<form asp-action="AddToCart" asp-controller="ShoppingCart" method="post">
+    <input type="hidden" asp-for="ShoeId" />
+    <div class="form-group">
+        <label for="quantity">Quantity:</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Add to Cart</button>
+
+
+</form>

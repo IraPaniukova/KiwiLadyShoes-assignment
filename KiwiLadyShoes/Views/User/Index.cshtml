@@ -1,0 +1,165 @@
+﻿<!--Added on 23/10/2023- Victor Reis -->
+@model IPagedList<KiwiLadyShoes.Models.AspNetUser>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!--ADDING script for  Auto Suggest SEARCH BOX, Victor Reis 23/10/23-->
+<script type="text/javascript">
+
+    function XAjaxRequest(searchString) {
+        if (searchString.length < 3) {
+            document.getElementById("autoSuggestContainer").innerHTML = "";
+            return;
+        }
+        var xmlhttp;
+
+        xmlhttp = new XMLHttpRequest();
+
+        var url = "/User/IndexAJAX?searchString=" + searchString;
+
+        xmlhttp.open("GET", url, false);
+
+        xmlhttp.send();
+
+        document.getElementById("autoSuggestContainer").style.display = "block";
+
+        document.getElementById("autoSuggestContainer").innerHTML = "";
+
+        var messageObject = JSON.parse(xmlhttp.responseText); 
+
+        var autoSuggestions = "";
+
+        for (var i = 0; i < messageObject.length; i++) {
+
+
+            autoSuggestions +=
+
+                "<input type=\"button\" value=\"" + messageObject[i].ProductName + "\" "
+
+                + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
+
+                + "style =\"width: 280px\" />";
+
+            autoSuggestions += "<br />";
+        }
+        document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
+
+    }
+
+</script>
+
+<h1>User Management</h1>
+
+<div class="row">
+    <div class="Col-md-auto">
+        <br />
+
+        <!--Edited the styling the return buttong to management page - Victor Reis 23/10/2023 -->
+        <a asp-action="Create" class="btn btn-custom ">Add New User</a>
+        <!--Added the return buttong to management page - Victor Reis 23/10/2023 -->
+        <a class="btn btn-secondary" asp-area="" asp-controller="Management" asp-action="Index"><i class="bi bi-house-gear"></i> Back to Management Page</a>
+
+
+    </div>
+
+</div>
+<br />
+
+
+<form id="searchForm" action="/User/Index" method="get">
+    <div class="row ">
+        <div class="col-auto ">
+            <p>Search User </p>
+        </div>
+        <div class="col-auto">
+            <div class="input-group flex-nowrap gap-1">
+                <input type="text" style="border: 0;" id="searchString" name="searchString" style="width: 180px" autocomplete="off" onkeyup="AjaxRequest(this.value)" />
+                <div id="autoSuggestContainer" style="position: absolute; top:35px; display: none, z-index: 100; "></div>
+                <input class="btn btn-light" type="submit" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["UserSortParam"]">@Html.DisplayNameFor(model => model.First().FirstName)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Birthday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().PhoneNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Birthday)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+           
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+              
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                 <td>
+                    <!--Added Styling and icons and removing undeline for the buttons - Victor Reis 23/10/2023 -->
+                    <a style="text-decoration:none" asp-action="Edit" asp-route-id="@item.Id"> Edit</a>
+                    |
+                    <a style="text-decoration:none" asp-action="Details" asp-route-id="@item.Id"> Details</a>
+                    |
+                    <a style="text-decoration:none"  asp-action="Delete" asp-route-id="@item.Id"> Delete</a>
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<!----------ADD PAGING-------->
+@Html.PagedListPager(Model, page => Url.Action("Index",
+
+        new { Page = page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+
+    })
+<!---------------------------------->

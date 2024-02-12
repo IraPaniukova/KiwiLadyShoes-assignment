@@ -1,0 +1,47 @@
+﻿@model List< KiwiLadyShoes.Models.ViewModels.AssignRoleViewModel>
+
+<div class="row">
+    <div class="col-md-9">
+        <h1>Users</h1>
+
+    </div>
+
+    <div class="col-md-3">
+        <br />
+
+        <a class="btn btn-secondary" asp-area="" asp-controller="Account" asp-action="Index"></i> Back to Roles Page</a>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>Roles</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserId</td>
+                <td>@user.UserName</td>
+                <td>
+                    @foreach (var role in user.Roles)
+                    {
+                        <span>@role</span>
+                    }
+                </td>
+                <td>
+                    @*<a href="@Url.Action("EditUser", new { id = user.UserId })">Edit</a> |*@
+                    <a href="@Url.Action("AssignRole", new { id = user.UserId })">Assign Role</a> |
+                    <a href="@Url.Action("UpdateRole", new { id = user.UserId })">Update Role</a> |
+                    @*<form asp-action="DeleteUser" asp-route-id="@user.UserId" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                        <button type="submit" class="link-button">Delete</button>
+                    </form>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

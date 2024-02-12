@@ -1,0 +1,31 @@
+﻿@model KiwiLadyShoes.Models.ViewModels.AssignRoleViewModel
+
+<h1>Assign Role</h1>
+
+<form class="form" asp-action="AssignRole" method="post" class="form-control">
+    <div>
+        <label for="UserId">User ID:</label>
+        <input type="text" id="UserId" name="UserId" value="@Model.UserId" readonly />
+    </div>
+    <hr />  
+    <div>
+        <label for="UserName">User Name:</label>
+        <input type="text" id="UserName" name="UserName" value="@Model.UserName" readonly />
+    </div>
+    <hr />
+    <div>
+        <label for="RoleId">Role:</label>
+        <select id="RoleId" name="RoleId">
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role.Id">@role.Name</option>
+            }
+        </select>
+    </div>
+    <div>
+        <hr />
+        <br />
+        <button type="submit" class="btn btn-custom">Assign Role</button>
+        <a class="btn btn-secondary" asp-area="" asp-controller="User" asp-action="Index"></i> Back to User Page</a>
+    </div>
+</form>

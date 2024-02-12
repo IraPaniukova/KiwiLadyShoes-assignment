@@ -1,0 +1,71 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    /*Added style options Ira, 29.09.23*/
+    background-color: #1e2a3a;
+    color: white;
+    /*------------------*/
+}
+
+/*Added style options Ira, 29.09.23*/
+
+.Bgrnd {
+    background-color: #1e2a3a;
+}
+/*------------------*/
+
+/*Added style options Ira, 16/10.23*/
+a 
+{
+    color: #dcb98e;
+}
+h1, h2, h3, h4, h5{
+    color: white;
+}
+th, td{color: white;}
+
+/*------------------*/
+
+/*Added style options Ira, 27/10.23*/
+.btn-custom {
+    background-color: #dcb98e;
+    color: black;
+    line-height: 1.5;
+}
+
+    .btn-custom:hover {
+        background-color: #916d40;
+        color: white
+    }
+.form {
+    background-color: #1e2a3a;
+    border:0;
+}
+
+label {
+    color: white;
+    font-size: 20px;
+}
+input {
+    #1e2a3a;
+    tab-size:20px;
+}
+button {
+    background-color: #dcb98e;
+    color: black;
+    line-height: 1.5;
+}

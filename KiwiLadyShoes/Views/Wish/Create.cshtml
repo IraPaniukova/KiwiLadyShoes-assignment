@@ -1,0 +1,79 @@
+﻿@model KiwiLadyShoes.Models.Shoe
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- Made everything manually, Ira, 10/11/23 and 11/11/23-->
+<div class="row">
+    <div class="col-md-8">
+        <h3 style="color: #dcb98e">Do you want to save this shoe pair in your wish list?</h3>
+    </div>
+    <div class="col-md-2" style="margin-top: 8px">
+        <a asp-action="Index">My wish list</a>
+    </div>
+    <div class="col-md-2" style="margin-top: 8px">
+        <a asp-controller="Shoe" asp-action="Public">Back to browse</a>
+    </div>
+</div>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>  Image </th>
+            <th> Shoe Name     </th>
+            <th> Size  </th>
+            <th> Colour </th>
+            <th> Material</th>
+            <th> Price </th>
+            <th> Brand  </th>
+            <th> Type </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td> <img src="@Url.Content(Model.Image)" alt="Shoe Image" width="120"> </td>
+            <td> @Model.ShoeName   </td>
+            <td>@Model.Size   </td>
+            <td> @Model.Colour </td>
+            <td>  @Model.Material  </td>
+            <td> @Model.Price</td>
+            <td> @Model.Brand.BrandName   </td>
+            <td> @Model.Type.TypeName </td>
+
+        </tr>
+
+    </tbody>
+</table>
+
+
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-controller="Wish" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="hidden" name="shoeId" value="@ViewData["ShoeId"]" /> @*the input exist but is not seen by an user*@
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="userId" value="@ViewData["UserId"]" /> @*the input exist but is not seen by an user*@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-custom" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

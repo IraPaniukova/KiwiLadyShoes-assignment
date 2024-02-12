@@ -1,0 +1,34 @@
+﻿<h1 style="text-transform: uppercase">Reports</h1>
+<a class="btn btn-secondary" asp-area="" asp-controller="Management" asp-action="Index"><i class="bi bi-house-gear"></i> Back to Management Page</a>
+
+<br />
+<hr />
+<br />
+
+@*<!---Ira, 7/11/23-->*@
+@if (User.IsInRole("Administrator")) 
+{
+        <h3>Sales per Shoe </h3>
+        <br>
+
+        <form method="post" action="@Url.Action("Sales", "Report")">
+            <div class="d-grid col-3 justify-content-beginning">
+                <input class="btn btn-custom" type="submit" value="Go to the page">
+            </div>
+        </form>
+        <br />
+        <hr />
+        <br />
+    <h3>Full Stock per Name</h3> //Ira, 10/11/23
+    <br>
+
+    <form method="post" action="@Url.Action("StockPerName", "Report")">
+        <div class="d-grid col-3 justify-content-beginning">
+            <input class="btn btn-custom" type="submit" value="Go to the page">
+        </div>
+    </form>
+
+    <br />
+    <hr />
+    <br />
+}

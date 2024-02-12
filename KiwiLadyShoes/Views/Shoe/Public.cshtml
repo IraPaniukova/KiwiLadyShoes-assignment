@@ -1,0 +1,184 @@
+﻿@model IPagedList<KiwiLadyShoes.Models.Shoe>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+
+<!--ADDING script for SEARCH BOX, Ira, 19/10/23-->
+<script type="text/javascript">
+    function AjaxRequest(searchString) {
+        if (searchString.length < 3) {
+            documet.getElementbyId("autoSuggestContainer").innerHTML = "";
+            return;
+        }
+        var xmlhttp = new XMLHttpRequest();
+        var url = "/Shoe/indexAjax?searchString=" + searchString;
+        xmlhttp.open("GET", url, false); // open connection, GET is quick and simple, false: sync page will freeze
+        xmlhttp.send(); // send the request to IndexAJAX
+        document.getElementById("autoSuggestContainer").style.display = "block";
+        document.getElementById("autoSuggestContainer").innerHTML = "";
+        var messageObject = JSON.parse(xmlhttp.responseText); // receive the respose text
+        var autoSuggestions = "";
+        for (var i = 0; i < messageObject.length; i++) {
+            autoSuggestions +=
+
+                "<input type=\"button\" value=\"" + messageObject[i].ShoeName + "\" "
+
+                + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
+
+                + "style =\"width: 280px\" />";
+            autoSuggestions += "<br />";
+        }
+        document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
+    }
+</script>
+
+@{
+    ViewData["Title"] = "Shoes"; // added the Label for the navigator tab
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row ">
+    <div class="col-md-10">
+        <h1>All shoes</h1>
+    </div>
+    <div class="col-md-2 ">
+        <br />
+        @if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
+        {
+            <a asp-action="Index">Manage shoes</a>
+        }
+    </div>
+</div>
+<br />
+<!--Container to search by name with autosuggestion, Ira, 19/10/23-->
+<form id="searchForm" action="/Shoe/Public" method="get">
+    <div class="row ">
+        <div class="col-md-auto ">
+            <p>Search by name </p>
+        </div>
+        <div class="col-md-auto">
+            <div class="input-group flex-nowrap gap-1">
+                <input type="text" style="border: 0;" id="searchString" name="searchString" style="width: 180px" autocomplete="off" onkeyup="AjaxRequest(this.value)" />
+                <div id="autoSuggestContainer" style="position: absolute; top:35px; display: none, z-index: 100; "></div>
+                <input class="btn btn-light" type="submit" value="Search" />
+            </div>
+        </div>
+        <div class="col-md-auto  text-right">
+            <!--Ira, added 28/10/23 to be able to sort by price here-->
+            <a asp-action="Public" asp-route-sort="@ViewData["SizeSortParam"]" asp-route-page="@Model.PageNumber">Sort by size</a>
+        </div>
+        <div class="col-auto"> <!--Ira, added 28/10/23 to be able to sort by price here-->
+            <a asp-action="Public" asp-route-sort="@ViewData["PriceSortParam"]" asp-route-page="@Model.PageNumber">Sort by price</a>
+        </div>
+    </div>
+</form>
+<br>
+<br />
+<!---------------------------------->
+<!--Container with Card styling for shoes page - Victor Reis 20/10/2023 -->
+<!--The card design had some problems on changing screen size, correction made by Ira, 27/10/23-->
+
+<div class="row">
+    @* style="width: 100%; overflow-x: auto;  white-space: nowrap">*@
+  
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6 col-lg-4  mb-3 ">
+            <div class="card h-100 mb-3" style="min-width: 300px;  background-color: transparent; box-shadow: 0 0 7px #050910;  padding: 20px; border-radius: 5px; ">
+                <div class="row g-0">
+
+                    <div class="card-header text-white bg-secondary">
+                        <p class="card-text">
+                            <h5 class="card-title text-truncate" background:none>
+                                @item.ShoeName
+                            </h5>
+                        </p>
+                    </div>
+
+                    <div class="col-md-6" style="min-height: 250px">
+                        <img src="@Url.Content(item.Image)" width="100%" alt="Shoe"> <!---small correstion , Ira 8/11/23-->
+                        
+                    </div>
+                    <!--Container with text and description of the shoes - Victor Reis 21/10/2023 -->
+                    <div class="col-md-6">
+                        <div class="card-body" style="background-color:transparent">
+                            <!--Adding conditional statement Ira 28/10/23-->
+                            @if (item.StockQuantity == 0)
+                            {
+                                <p class="card-text text-danger"><b>OUT OF STOCK</b></p>
+                        }
+                            <p class="card-text"><b>Size: </b>@item.Size</p>
+                           
+                            <p class="card-text"><b>Colour: </b>@item.Colour</p>
+                            <p class="card-text"><b>Material: </b>@item.Material</p>
+
+                        </div>
+                    </div>
+
+                    <!--------------Text and description Container End-------------------->
+                    <!--Container with buttons to add to cart - Victor Reis 21/10/2023 -->
+                    <div class="col-md-12" style="background-color:#1e2a3a">
+                        <div class="card-footer ">
+                            <p class="card-text">
+                                <div class="row">
+                                    <div class="col-md-auto mt-1">
+                                        <a class="btn btn-outline-light float-right" asp-action="Details" asp-route-id="@item.ShoeId">
+                                            <i class="bi bi-eye-fill"></i> Details
+                                        </a>
+                                    </div>
+                                    <!--Ira,  corretions 8/11/23, adding if for an item out of stock-->
+                                    <div class="col-md-auto mt-1">
+
+                                        @if (item.StockQuantity > 0)
+                                        {
+                                            <a class="btn btn-custom"
+                                            asp-controller="ShoppingCart"   
+                                           asp-action="AddToCart" 
+                                           asp-route-id="@item.ShoeId">
+                                            <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c")) 
+
+                                        </a>}
+                                        @if (item.StockQuantity == 0 && !User.Identity.IsAuthenticated) //the option to add to wish list is only for registered users, Ira, 10/11/23
+                                        {
+                                            <button id="YouNeedToRegister" class="btn btn-custom">Wish List (Price @item.Price.ToString("c")) </button>
+
+                                            <script>
+                                                document.getElementById("YouNeedToRegister").addEventListener("click", function () {
+                                                    alert("THIS OPTION IS ONLY FOR OUR MEMEBERS. LOGIN OR REGISTER TO GET MEMBERSHIP AND ADD THE ITEM TO YOUR WISH LIST");
+                                                });
+
+                                            </script>
+                                        }
+                                        @if (item.StockQuantity == 0 && User.Identity.IsAuthenticated) //the option to add to wish list is only for registered users, Ira, 10/11/23
+                                        {
+                                            <a class="btn btn-custom"
+                                               asp-controller="Wish"
+                                               asp-action="Create"
+                                               asp-route-shoeId="@item.ShoeId">
+                                                <i class="bi bi-cart-plus"></i> Wish List (Price @item.Price.ToString("c"))
+                                            </a>
+                                        }
+
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+                    </div>
+                    <!--------------Footer Buttons container Ends-------------------->
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!--------------Card Container Ends-------------------->
+<!----------ADD PAGES-------->
+@Html.PagedListPager(Model, page => Url.Action("Public",
+
+        new { Page = page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+
+    })
+<!---------------------------------->

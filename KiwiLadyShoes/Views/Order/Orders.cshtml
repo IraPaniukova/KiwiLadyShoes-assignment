@@ -1,0 +1,112 @@
+﻿@model IEnumerable<KiwiLadyShoes.Models.ViewModels.OrdersVM>
+
+@{
+    ViewData["Title"] = "Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Orders</h1>
+
+
+<p>
+    <a asp-action="Public" asp-area="" asp-controller="Shoe" class="btn btn-custom"> Add New Order</a>
+</p>
+<br />
+<form id="searchForm" action="/Order/Orders" method="get" autocomplete="off">
+
+        Search Customer
+        
+        <div>
+            <input type="text" id="searchString" name="searchString"
+                   autocomplete="off" onkeyup="XAjaxRequest(this.value);"
+                   style="width: 180px" />
+            <input type="submit" value="Search" />
+
+            <br />
+        </div>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShoeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                    @Html.DisplayFor(modelItem => item.SaleDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShoeName)
+            </td>
+            <td>
+                <img src="@Url.Content(item.Image)" alt="Shoe Image" width="100em">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                    <a asp-action="Details" asp-area="" asp-controller="Sale" asp-route-id="@item.SaleId">Details</a>|
+                    <a asp-action="Delete" asp-area="" asp-controller="Sale" asp-route-id="@item.SaleId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

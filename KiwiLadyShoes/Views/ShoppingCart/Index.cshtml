@@ -1,0 +1,91 @@
+﻿@model List<KiwiLadyShoes.Models.ViewModels.CartItem>
+@using System.Globalization
+<h1>Shopping Cart</h1>
+<script src="https://www.paypal.com/sdk/js?client-id=ATNwtOFAgffDhMfTE8dGXlau9W8Gv82HLENDNmAfobf55lKFzR1u48MWIaTOK4s6V0Rancd7L8HJSox3">
+    // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+</script>
+@if (Model.Count == 0)
+{ <br />
+    <h3>Your shopping cart is empty.</h3>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Shoe Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Image</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.shoe.ShoeName</td>
+                    <td>@item.shoe.Price.ToString("c", CultureInfo.CurrentCulture)</td>
+                    <td>@item.quantity</td>
+                    <td>
+                        <img src="@Url.Content( item.shoe.Image)" alt="Shoe Image" width="150" height="150" />
+                    </td>
+                    <td>$@(item.shoe.Price * item.quantity)</td>
+                    <td>
+                        <a href="@Url.Action("RemoveFromCart", "ShoppingCart", new { shoesId = item.shoe.ShoeId })">Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3 >
+        <strong>Total: @Model.Sum(item => item.shoe.Price * item.quantity).ToString("c")</strong>
+    </h3>
+    <br/>
+
+    <div >
+        <a href="@Url.Action("ClearCart", "ShoppingCart")">Clear Cart</a>
+        <a asp-controller="Shoe" asp-action="Public">Continue shopping</a>
+    </div>
+    <br />
+
+    <input id="GrandTotal" type="hidden" value="@Model.Sum(item => item.shoe.Price * item.quantity)" />
+
+    <div  id="paypal-button-container"></div>
+    <script>
+        paypal.Buttons({
+            createOrder: function (data, actions) {
+                // This function sets up the details of the transaction,
+                // including the amount and line item details.
+
+                var grandTotal =
+                    parseFloat(document.getElementById("GrandTotal").value).toFixed(2).toString();
+                //alert("GrandTotal = " + grandTotal);
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: grandTotal
+                        }
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function (details) {
+                    // This function shows a transaction success message to your buyer.
+                    alert('Transaction completed by ' + details.payer.name.given_name);
+                    window.location.href = '/product/success';
+                });
+            },
+            style: {
+                
+                shape: 'pill',
+                label: 'paypal'
+            }
+
+        }).render('#paypal-button-container');
+    </script>
+
+}

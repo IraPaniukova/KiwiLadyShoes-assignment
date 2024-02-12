@@ -1,0 +1,79 @@
+﻿@model KiwiLadyShoes.Models.Shoe
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!--Some chages are added, Ira, 19/10/23-->
+
+<h1>Details</h1>
+<br />
+<div>
+    <dl class="row">
+        <dt class="col-auto">
+            <h4>Name: </h4>
+        </dt>
+        <dd class="col-sm-10">
+            <h4>@Html.DisplayFor(model => model.ShoeName)</h4>
+        </dd>
+    </dl>
+
+    <hr />
+
+    <img src="@Url.Content(Model.Image)" alt="Shoe Image" width="50%">
+   
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Size)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Size)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StockQuantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StockQuantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Colour)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Colour)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Material)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Material)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Brand)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Brand.BrandName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Type.TypeName)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.ShoeId">Edit</a>
+    }
+    |
+    <a asp-action="Index">Back to List</a>
+</div>

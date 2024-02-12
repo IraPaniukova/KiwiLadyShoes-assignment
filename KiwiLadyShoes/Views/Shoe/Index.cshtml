@@ -1,0 +1,172 @@
+﻿@model IPagedList<KiwiLadyShoes.Models.Shoe>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+
+<!--ADDING script for SEARCH BOX Autosuggestion, Ira, 19/10/23-->
+<script type="text/javascript">
+    function AjaxRequest(searchString) {
+        if (searchString.length < 3) {
+            documet.getElementbyId("autoSuggestContainer").innerHTML = "";
+            return;
+        }
+        var xmlhttp = new XMLHttpRequest();
+        var url = "/Shoe/indexAjax?searchString=" + searchString;
+        xmlhttp.open("GET", url, false); // open connection, GET is quick and simple, false: sync page will freeze
+        xmlhttp.send(); // send the request to IndexAJAX
+        document.getElementById("autoSuggestContainer").style.display = "block";
+        document.getElementById("autoSuggestContainer").innerHTML = "";
+        var messageObject = JSON.parse(xmlhttp.responseText); // receive the respose text
+        var autoSuggestions = "";
+        for (var i = 0; i < messageObject.length; i++) {
+            autoSuggestions +=
+
+                "<input type=\"button\" value=\"" + messageObject[i].ShoeName + "\" "
+
+                + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
+
+                + "style =\"width: 280px\" />";
+            autoSuggestions += "<br />";
+        }
+        document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
+    }
+</script>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>All shoes</h1>
+
+<div class="row">
+    <div class="Col-md-auto">
+        <br />
+        @if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
+        {
+            <a asp-action="Create" class="btn btn-custom ">Create New</a>
+        }
+        <a class="btn btn-secondary" asp-area="" asp-controller="Management" asp-action="Index"><i class="bi bi-house-gear"></i> Back to Management Page</a>
+    </div>
+
+</div>
+<br />
+
+<!--Container to search by name with autosuggestion, Ira, 19/10/23-->
+<form id="searchForm" action="/Shoe/index" method="get">
+    <div class="row ">
+        <div class="col-auto ">
+            <p>Search by name </p>
+        </div>
+        <div class="col-auto">
+            <div class="input-group flex-nowrap gap-1">
+                <input type="text" style="border: 0; width: 180px" id="searchString" name="searchString" autocomplete="off" onkeyup="AjaxRequest(this.value)" />
+                <div id="autoSuggestContainer" style="position: absolute; top:35px; display: none, z-index: 100; "></div>
+                <input class="btn btn-light" type="submit" value="Search" />
+            </div>
+        </div>
+
+    </div>
+</form>
+<br>
+<br />
+<!---------------------------------->
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ShoeName)
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.First().Size)*@ <!--Using sort, Ira, 28/10/23-->
+                <a asp-action="Index" asp-route-sort="@ViewData["SizeSortParam"]" asp-route-page="@Model.PageNumber"> Size</a>
+
+            </th>
+
+            <th>
+                @*@Html.DisplayNameFor(model => model.First().StockQuantity)*@
+                <a asp-action="Index" asp-route-sort="@ViewData["QtySortParam"]" asp-route-page="@Model.PageNumber">Stock Quantity</a>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Colour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Material)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.First().Price)*@  <!--Using sort, Ira-->
+                <a asp-action="Index" asp-route-sort="@ViewData["PriceSortParam"]" asp-route-page="@Model.PageNumber">Price</a>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Type)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShoeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StockQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Colour)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Material)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Image)*@
+                    <img src="@Url.Content(item.Image)" alt="Shoe Image" width="120">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand.BrandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type.TypeName)
+                </td>
+                <td>
+                    @if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.ShoeId">Edit</a>
+                    } |
+                    <a asp-action="Details" asp-route-id="@item.ShoeId">Details</a> |
+                    @if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.ShoeId">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!----------ADD PAGES-------->
+@Html.PagedListPager(Model, page => Url.Action("Index",
+
+        new { Page = page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+
+    })
+<!---------------------------------->

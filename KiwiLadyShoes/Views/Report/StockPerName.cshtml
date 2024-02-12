@@ -1,0 +1,68 @@
+﻿@model IEnumerable<KiwiLadyShoes.Models.ViewModels.ReportStockPerName>
+
+@{
+    ViewData["Title"] = "StockPerName";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-10">
+
+        <h1>Full Stock per Name</h1>
+    </div>
+
+    <div class="col-md-2">
+        <br />
+
+        <a asp-action="Index">Back to All Reports</a>
+    </div>
+</div>
+<br />
+<br />
+
+
+<form id="searchForm" action="/Report/StockPerName" method="get" autocomplete="off">
+    <p>
+        Search shoes:
+        <div>
+            <input type="text" id="SearchString" name="SearchString" 
+                   style="width: 180px" />
+            <input class="brn btn-custom" type="submit" value="Search/Show all" />
+            <br />
+           
+        </div>
+
+    </p>
+</form>
+<table class="table">
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th> @Html.DisplayNameFor(model => model.ShoeName)</th>
+            <th> @Html.DisplayNameFor(model => model.FullStock)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td class="@(item.FullStock < 10 ? "text-danger" : "")">@Html.DisplayFor(modelItem => item.ShoeName)</td>
+                <td class="@(item.FullStock < 10 ? "text-danger" : "")">@Html.DisplayFor(modelItem => item.FullStock)</td>
+                <td>
+                    @if (item.FullStock < 10)
+                    {
+                        <span class="text-danger">LOW STOCK!</span>
+                    }
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>

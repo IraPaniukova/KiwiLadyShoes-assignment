@@ -1,0 +1,87 @@
+﻿@model IEnumerable<KiwiLadyShoes.Models.Wish>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    @*//adjusted for my purposes (adding proper table, etc.) on 11/11/23, Ira*@
+    <div class="col-md-10">
+        <h1>Wish List</h1>
+    </div>
+    <div class="col-md-2 " style="margin-top: 8px">
+        <a asp-controller="Shoe" asp-action="Public">Back to browse</a>
+    </div>
+</div>
+<br />
+@if (User.Identity.IsAuthenticated)
+{
+
+    @if (!Model.Any())
+    {
+        <h3>Your wish list is empty.</h3>
+    }
+    else
+    {
+
+        <br />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>  Image </th>
+                    <th> Shoe Name     </th>
+                    <th> Size  </th>
+                    <th> Colour </th>
+                    <th> Material</th>
+                    <th> Price </th>
+                    <th> Brand  </th>
+                    <th> Type </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@Url.Content(item.Shoe.Image)" alt="Shoe Image" width="120">
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shoe.ShoeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shoe.Size)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shoe.Colour)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shoe.Material)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shoe.Price)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shoe.Brand.BrandName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shoe.Type.TypeName)
+                        </td>
+
+                        <td>
+
+                            <a asp-action="Delete" asp-route-id="@item.WishId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }           }
+else
+{
+    <h4>To use this option  you need to have our Membership (to be a registered user).</h4>
+    <h4>  Please login or register.</h4>
+}

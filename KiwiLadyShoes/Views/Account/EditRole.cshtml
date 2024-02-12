@@ -1,0 +1,15 @@
+﻿@model KiwiLadyShoes.Models.ViewModels.EditRoleViewModel
+
+<h1>Edit Role</h1>
+
+<form asp-action="EditRole">
+    <input type="hidden" asp-for="RoleId" />
+
+    <div>
+        <label for="RoleName">Role Name:</label>
+        <input type="text" id="RoleName" name="RoleName" value="@Model.RoleName" />
+    </div>
+    <div>
+        <button type="submit">Save</button>
+    </div>
+</form>

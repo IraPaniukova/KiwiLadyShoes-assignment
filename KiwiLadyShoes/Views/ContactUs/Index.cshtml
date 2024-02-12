@@ -1,0 +1,79 @@
+﻿<!--Started to create on 29/10/23 Ira-->
+
+
+
+<div class="row">
+    <div class="col-md-10">
+        <h1>Contact us</h1>
+    </div>
+    <div class="col-md-2 " style="margin-top: 8px">
+        <a asp-controller="Shoe" asp-action="Public">Back to browse</a>
+    </div>
+</div>
+<br>
+@if (User.Identity.IsAuthenticated)
+{
+    <form class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" minlength="3">
+            <div class="invalid-feedback">The name cannot be shorter than 3 symbols</div>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email">
+            <div class="invalid-feedback">Format is not correct</div>
+        </div>
+        <br />
+        <div class="mb-3">
+            <textarea name="question" id="question" class="form-control" rows="5"></textarea>
+            @*<div class="invalid-feedback">The text cannot be shorter than xx symbols</div>*@
+
+        </div>
+        <button type="submit" class="btn btn-custom">Submit</button>
+        <button type="reset" id="resetQ" class="btn btn-custom">Clear </button>
+    </form>
+}
+else
+{
+    <h4>To contact us you need to have our Membership (to be a registered user).</h4>
+        <h4>  Please login or register.</h4>
+}
+
+
+
+<script>
+    //the script is from the last semester classes Front End with Ahmad
+
+    // Disable form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+<!--the script is from this semester classes Full Stack, Tiny MCE. But I found a newr option of the tinyMCE, Ira 29/10/23-->
+<script type="text/javascript" src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script type="text/javascript">
+    tinymce.init({
+        selector: "#question",
+        plugins: "emoticons textcolor",
+        toolbar: "undo redo styleselect bold italic emoticons forecolor backcolor fontselect",
+        placeholder: 'Type here...',
+        height: 300,
+    });
+</script>

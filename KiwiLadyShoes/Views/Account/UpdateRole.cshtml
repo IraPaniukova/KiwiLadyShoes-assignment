@@ -1,0 +1,36 @@
+﻿@model KiwiLadyShoes.Models.ViewModels.AssignRoleViewModel
+
+<h1>Update Role</h1>
+
+<form asp-action="UpdateRole" method="post">
+    <div>
+        <label for="UserId">User ID:</label>
+        <input type="text" id="UserId" name="UserId" value="@Model.UserId" readonly />
+    </div>
+    <hr />
+    <div>
+        <label for="UserName">User Name:</label>
+        <input type="text" id="UserName" name="UserName" value="@Model.UserName" readonly />
+    </div><hr />
+
+    <div>
+        <label for="RoleId">Role ID:</label>
+        <input type="text" id="RoleId" name="RoleId" value="@Model.RoleId" readonly />
+    </div>
+    <hr />
+    <div>
+        <label for="RoleName">Role Name:</label>
+        <select id="RoleName" name="RoleName">
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role.Name" selected="@Equals(role.Name, Model.RoleName)">@role.Name</option>
+
+            }
+        </select>
+    </div>
+    <hr />
+    <div>
+        <button type="submit" class="btn btn-custom">Update</button>
+        <a class="btn btn-secondary" asp-area="" asp-controller="Account" asp-action="Index"></i> Back to Roles Page</a>
+    </div>
+</form>

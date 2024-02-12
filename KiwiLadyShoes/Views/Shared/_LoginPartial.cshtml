@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using KiwiLadyShoes.Areas.Identity.Data
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{ //changed text-dark to text-light Ira, 16/10/23 
+        
+    <li class="nav-item"> <!--Because the name is too long, added the option to trancate it -->
+            <a id="manage" class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <span style="max-width: 150px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 7px;">
+                    Hello @UserManager.GetUserName(User)!
+                </span>
+            </a>
+        </li>
+    <li class="nav-item">
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <span style="max-width: 150px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 5px;">
+                    <button id="logout" type="submit" class="nav-link btn btn-link text-light" style="margin-top: 1px">Logout</button>
+        </form>
+    </li>
+}
+else
+{
+        <li class="nav-item">
+            <!--changed text-dark to text-light, Ira, 29.09.23-->
+            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <!--changed text-dark to text-light, Ira, 29.09.23-->
+            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+}
+</ul>

@@ -1,0 +1,81 @@
+﻿@model KiwiLadyShoes.Models.Shoe
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewData["ShowPopup"] != null)  //creating pop-up alert if the name already exists in this size, Ira 10/11/23
+{
+    <script>
+        alert("Shoe with the same name and size already exists.");
+    </script>
+}
+
+<h1>Edit</h1>
+
+<h4>Shoe</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ShoeId" />
+            <div class="form-group">
+                <label asp-for="ShoeName" class="control-label"></label>
+                <input asp-for="ShoeName" class="form-control" />
+                <span asp-validation-for="ShoeName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Size" class="control-label"></label>
+                <input asp-for="Size" class="form-control" />
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StockQuantity" class="control-label"></label>
+                <input asp-for="StockQuantity" class="form-control" />
+                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colour" class="control-label"></label>
+                <input asp-for="Colour" class="form-control" />
+                <span asp-validation-for="Colour" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Material" class="control-label"></label>
+                <input asp-for="Material" class="form-control" />
+                <span asp-validation-for="Material" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" type="file" accept="image/jpeg, image/png, image/jpg" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandId" class="control-label"></label>
+                <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
+                <span asp-validation-for="BrandId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeId" class="control-label"></label>
+                <select asp-for="TypeId" class="form-control" asp-items="ViewBag.TypeId"></select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
